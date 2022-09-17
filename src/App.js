@@ -1,10 +1,14 @@
-// import CategoryItem from "./components/category-item/category-item.component";
-// import Directory from "./components/directory/directory.component";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Outlet } from "react-router-dom";
 
-// import Home from "./routes/home/home.component";
+import Navigation from "./components/routes/navigation/navigation.component";
 import Home from "./components/routes/home/home.component";
-// components\routes\home\home.component
+import SignIn from "./components/routes/sign-in/sign-in.component";
+
+// SHOP PAGE
+const Shop = () => {
+  return <h1>I am the shop page</h1>;
+};
+
 /* If text is the SAME for all areas, we can hardcode those,
 If text is different, then we PUT THOSE IN THE OBJECT CATEGORIES
 - categories.map((category) => {container content}. In this, we are going to iterate through our categories array to input out each of the names. This helps to PREVENT DRY.
@@ -15,12 +19,30 @@ const App = () => {
   // </Routes>
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Navigation />}>
+        <Route index element={<Home />} />
+        <Route path="shop" element={<Shop />} />
+        <Route path="sign-in" element={<SignIn />} />
+      </Route>
     </Routes>
   );
 };
 
 export default App;
+
+// Install FIREBASE with: 'yarn add firebase'
+
+/* the 'index' MATCHES the BASE COMPONENT, so when we have the default slash, then home will ALSO RENDER WITH NAVIGATION BY DEFAULT.
+<Route path="/" element={<Navigation />}>
+  <Route index element={<Home />} />
+  <Route path="shop" element={<Shop />} />
+</Route>;
+*/
+
+// Renders in the Shop component while home disappears
+{
+  /* <Route path="/shop" element={<Shop />} /> */
+}
 
 // element RENDERS IN our HOME COMPONENT
 {

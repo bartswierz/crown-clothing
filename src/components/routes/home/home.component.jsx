@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import Directory from "../../directory/directory.component";
 
 /* If text is the SAME for all areas, we can hardcode those,
@@ -34,7 +35,21 @@ const Home = () => {
     },
   ];
 
-  return <Directory categories={categories} />;
+  return (
+    <div>
+      <Directory categories={categories} />
+      <Outlet />
+    </div>
+  );
 };
 
 export default Home;
+
+/* USING OUTLET
+Outlet allows us to choose which order to render in our component.
+If we put <Outlet /> BEFORE <Directory/> Component then it will render shop content BEFORE Directory on the page. We can do the same by putting it AFTER by placing Outlet after Directory in the div. This RENDERS BOTH ON THE PAGE
+<div>
+<Directory categories={categories} />
+<Outlet />
+</div> 
+*/
