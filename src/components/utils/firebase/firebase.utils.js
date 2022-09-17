@@ -33,8 +33,35 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
 export const db = getFirestore();
 
+// Creating user data and storing that data inside our Firebase Firestore collection. We can see these user google popup SignIns on the firebase website(firebase->get started->Cloud Firestore)
 export const createUserDocumentFromAuth = async (userAuth) => {
   const userDocRef = doc(db, "users", userAuth.uid);
 
-  console.log(userDocRef);
+  // console.log(userDocRef);
+
+  const userSnapshot = await getDoc(userDocRef);
+  // console.log(userSnapshot);
+  // console.log(userSnapshot.exists());
+
+  /*
+  if user data exists
+  create set the document with the data from useAuth in my collection
+   it userSnapshot/user data does NOT exist 
+  */
+  if (!userSnapshot.exists()) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+    try {
+      // try to set the document
+      await setDoc(userDocRef, {
+        displayName,
+        email,
+        createdAt,
+      });
+    } catch (error) {
+      console.log("error creating the user", error.message);
+    }
+  }
+
+  return userDocRef;
 };
