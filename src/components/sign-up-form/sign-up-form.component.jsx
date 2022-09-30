@@ -17,11 +17,13 @@ const defaultFormFields = {
 const SignUpForm = () => {
   // Giving defaultFormFields gives initializes 'formFields' with the default empty strings that we will then update after. Passing in the default field values
   const [formFields, setFormFields] = useState(defaultFormFields);
+  // console.log(formFields);
 
   // Destructuring off the four values from formFields
   const { displayName, email, password, confirmPassword } = formFields;
 
-  console.log(formFields);
+  // const val = useContext(UserContext);
+  // console.log("hit");
 
   // Resets input textboxes on page back to default
   const resetFormFields = () => {

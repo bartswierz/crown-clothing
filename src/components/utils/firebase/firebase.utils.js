@@ -9,6 +9,8 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 // to get document instance -> doc, get the document data -> getDoc, set the document data -> setDoc.
@@ -90,3 +92,20 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 
   return await signInWithEmailAndPassword(auth, email, password);
 };
+
+// async function because it is AWAITING for the user to click SIGN OUT. We are waiting to see what 'signOut' will RETURN TO US
+export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) => {
+  onAuthStateChanged(auth, callback);
+};
+
+/**
+ *
+ * {
+ * next: callback,
+ * error: errorCalback,
+ * complete: completedCallback
+ * }
+ *
+ */

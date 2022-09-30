@@ -25,7 +25,7 @@ const SignInForm = () => {
   // Destructuring off the four values from formFields
   const { email, password } = formFields;
 
-  console.log(formFields);
+  // console.log(formFields);
 
   // Resets input textboxes on page back to default
   const resetFormFields = () => {
@@ -33,8 +33,7 @@ const SignInForm = () => {
   };
 
   const signInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    await createUserDocumentFromAuth(user);
+    await signInWithGooglePopup();
   };
 
   const handleSubmit = async (event) => {
@@ -42,8 +41,10 @@ const SignInForm = () => {
     event.preventDefault();
 
     try {
-      const response = await signInAuthUserWithEmailAndPassword(email, password);
-      console.log(response);
+      const { user } = await signInAuthUserWithEmailAndPassword(email, password);
+      // setCurrentUser(user);
+      console.log(user);
+
       resetFormFields();
     } catch (error) {
       switch (error.code) {

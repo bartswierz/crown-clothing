@@ -1,11 +1,16 @@
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { Outlet, Link } from "react-router-dom";
 
 import { ReactComponent as CrwnLogo } from "../../../assets/crown.svg";
+import { UserContext } from "../../../contexts/user.context";
+import { signOutUser } from "../../utils/firebase/firebase.utils";
 
 import "./navigation.styles.scss";
 // NAVIGATION BAR
 const Navigation = () => {
+  const { currentUser } = useContext(UserContext);
+  // console.log(currentUser);
+
   return (
     <Fragment>
       <div className="navigation">
@@ -20,9 +25,17 @@ const Navigation = () => {
             SHOP
           </Link>
           {/* Navigate to Sign In Page */}
-          <Link className="nav-link" to="/auth">
-            Sign In
-          </Link>
+          {/* IF currentUser EXISTS, then DISPLAY "SIGNOUT", 
+          IF DOES NOT EXIST, then display "Sign In" */}
+          {currentUser ? (
+            <span className="nav-link" onClick={signOutUser}>
+              SIGNOUT
+            </span>
+          ) : (
+            <Link className="nav-link" to="/auth">
+              SIGN IN
+            </Link>
+          )}
         </div>
       </div>
       <Outlet />
