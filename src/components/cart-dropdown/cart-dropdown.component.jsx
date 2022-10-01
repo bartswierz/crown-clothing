@@ -8,8 +8,16 @@ import CartItem from "../cart-item/cart-item.component";
 import "./cart-dropdown.styles.scss";
 import React from "react";
 
+// On button click we go to the checkout page with react method
+import { useNavigate } from "react-router-dom";
+
 const CartDropdown = () => {
   const { cartItems } = useContext(CartContext);
+  const navigate = useNavigate();
+
+  const goToCheckoutHandler = () => {
+    navigate("/checkout");
+  };
 
   return (
     <div className="cart-dropdown-container">
@@ -18,7 +26,7 @@ const CartDropdown = () => {
           <CartItem key={item.id} cartItem={item} />
         ))}
       </div>
-      <Button>GO TO CHECKOUT</Button>
+      <Button onClick={goToCheckoutHandler}>GO TO CHECKOUT</Button>
     </div>
   );
 };
