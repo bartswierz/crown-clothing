@@ -1,4 +1,4 @@
-import CategoryItem from "../category-item/category-item.component";
+import DirectoryItem from "../directory-item/directory-item.component";
 
 import "./directory.styles.scss";
 // Off the props we are getting categories
@@ -7,7 +7,7 @@ const Directory = ({ categories }) => {
     <div className="directory-container">
       {/* Destructuring categories element to title */}
       {categories.map((category) => (
-        <CategoryItem key={category.id} category={category} />
+        <DirectoryItem key={category.id} category={category} />
       ))}
     </div>
   );

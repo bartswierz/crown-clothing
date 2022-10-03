@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
-import Navigation from "./components/routes/navigation/navigation.component";
 import Home from "./components/routes/home/home.component";
+import Navigation from "./components/routes/navigation/navigation.component";
 import Authentication from "./components/routes/authentication/authentication.component";
 // import Shop from "./routes/shop/shop.component";
 import Shop from "./components/routes/shop/shop.component";
@@ -24,7 +24,7 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Navigation />}>
         <Route index element={<Home />} />
-        <Route path="shop" element={<Shop />} />
+        <Route path="shop/*" element={<Shop />} />
         <Route path="auth" element={<Authentication />} />
         <Route path="checkout" element={<Checkout />} />
       </Route>
@@ -33,6 +33,12 @@ const App = () => {
 };
 
 export default App;
+
+/*
+<Route path="shop/*" element={<Shop />} />
+shop/* means I want you to match "shop/ANYTHING" 
+it doesn't matter what just anything that starts with shop/. This is important as we have multiple product types which will be within shop -> shop/hats, shop/shoes, etc.
+*/
 
 // Install FIREBASE with: 'yarn add firebase'
 
