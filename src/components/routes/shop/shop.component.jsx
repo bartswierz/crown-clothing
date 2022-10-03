@@ -1,15 +1,38 @@
 // import SHOP_DATA from "../../../shop-data.json";
 
-import { useContext } from "react";
+import { useContext, Fragment } from "react";
 
-import { ProductsContext } from "../../../contexts/products.context";
+import { CategoriesContext } from "../../../contexts/categories.context";
 import ProductCard from "../../product-card/product-card.component";
 
 import "./shop.styles.scss";
 
 // Iterate through our shop-data json file with MAP
 const Shop = () => {
-  const { products } = useContext(ProductsContext);
+  const { categoriesMap } = useContext(CategoriesContext);
+
+  return (
+    <Fragment>
+      {Object.keys(categoriesMap).map((title) => (
+        <Fragment key={title}>
+          <h2>{title}</h2>
+          <div className="products-container">
+            {categoriesMap[title].map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </Fragment>
+      ))}
+    </Fragment>
+  );
+};
+
+export default Shop;
+
+/*
+// Iterate through our shop-data json file with MAP
+const Shop = () => {
+  const { products } = useContext(CategoriesContext);
 
   return (
     <div className="products-container">
@@ -19,8 +42,7 @@ const Shop = () => {
     </div>
   );
 };
-
-export default Shop;
+*/
 
 // SHOP_DATA -> each product contains the following inside:
 // {

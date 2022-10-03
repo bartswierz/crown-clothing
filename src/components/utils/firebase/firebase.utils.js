@@ -14,7 +14,7 @@ import {
 } from "firebase/auth";
 
 // to get document instance -> doc, get the document data -> getDoc, set the document data -> setDoc.
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, collection, writeBatch, query, getDocs } from "firebase/firestore";
 // These will let us make CRUD actions to our firebase database
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -30,18 +30,48 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 
 // Everytime user interacts with parameter, we require them to SLECT AN ACCOUNT
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
   prompt: "select_account",
 });
 
 export const auth = getAuth();
 
 // Pass signin the Auth and Provider
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
-export const signInWithGoogleRedirect = () => signInWithRedirect(auth, provider);
+export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
 export const db = getFirestore();
+
+//THIS ONE IS NOT REQUIRED FOR THE FRONTEND, THIS IS MEANT TO BE A 'ONE-OFF CALL' OTHERWISE IT WILL KEEP RE-ADDING DATA INTO OUR DATABASE. THE ALTERNATIVE IS TO WRITE OUR OWN JSON FILES WITH DATA
+// THIS WILL ADD COLLECTION INTO OUR 'FIRESTORE' - See firebase.google -> Cloud Firestore. This will be ran inside 'Products.context'
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const batch = writeBatch(db);
+  const collectionRef = collection(db, collectionKey);
+
+  objectsToAdd.forEach((object) => {
+    // const docRef = doc(collectionRef, object[field].toLowerCase());
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log("done");
+};
+
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, "categories");
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q);
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
+};
 
 // Creating user data and storing that data inside our Firebase Firestore collection. We can see these user google popup SignIns on the firebase website(firebase->get started->Cloud Firestore)
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation) => {
