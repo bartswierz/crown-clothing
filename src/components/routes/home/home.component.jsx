@@ -6,8 +6,27 @@ If text is different, then we PUT THOSE IN THE OBJECT CATEGORIES
 - categories.map((category) => {container content}. In this, we are going to iterate through our categories array to input out each of the names. This helps to PREVENT DRY.
   */
 const Home = () => {
-  // THIS IS OUR JSON
-  const categories = [
+  return (
+    <div>
+      <Directory />
+      <Outlet />
+    </div>
+  );
+};
+
+export default Home;
+
+/* USING OUTLET
+Outlet allows us to choose which order to render in our component.
+If we put <Outlet /> BEFORE <Directory/> Component then it will render shop content BEFORE Directory on the page. We can do the same by putting it AFTER by placing Outlet after Directory in the div. This RENDERS BOTH ON THE PAGE
+<div>
+<Directory categories={categories} />
+<Outlet />
+</div> 
+*/
+
+/*
+const categories = [
     {
       id: 1,
       title: "hats",
@@ -34,22 +53,4 @@ const Home = () => {
       imageUrl: "https://i.ibb.co/R70vBrQ/men.png",
     },
   ];
-
-  return (
-    <div>
-      <Directory categories={categories} />
-      <Outlet />
-    </div>
-  );
-};
-
-export default Home;
-
-/* USING OUTLET
-Outlet allows us to choose which order to render in our component.
-If we put <Outlet /> BEFORE <Directory/> Component then it will render shop content BEFORE Directory on the page. We can do the same by putting it AFTER by placing Outlet after Directory in the div. This RENDERS BOTH ON THE PAGE
-<div>
-<Directory categories={categories} />
-<Outlet />
-</div> 
 */

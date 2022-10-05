@@ -1,5 +1,7 @@
 import "./directory-item.styles";
 
+import { useNavigate } from "react-router-dom";
+
 import { BackgroundImage, Body, DirectoryItemContainer } from "./directory-item.styles";
 
 // Will receive ENTIRE OBJECT as a PROP
@@ -8,9 +10,13 @@ const DirectoryItem = ({ category }) => {
   // <div key={id} className="category-container">
 
   // Destructuring passed category
-  const { imageUrl, title } = category;
+  const { imageUrl, title, route } = category;
+  const navigate = useNavigate();
+
+  const onNavigateHandler = () => navigate(route);
+
   return (
-    <DirectoryItemContainer>
+    <DirectoryItemContainer onClick={onNavigateHandler}>
       <BackgroundImage imageUrl={imageUrl} />
       <Body>
         <h2>{title}</h2>
