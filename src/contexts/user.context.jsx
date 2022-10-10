@@ -2,6 +2,8 @@ import { createContext, useEffect, useReducer } from "react";
 
 import { onAuthStateChangedListener, createUserDocumentFromAuth } from "../components/utils/firebase/firebase.utils";
 
+import { createAction } from "../components/utils/reducer/reducer.utils";
+
 // as the actual value you want to access
 export const UserContext = createContext({
   setCurrentUser: () => null,
@@ -17,6 +19,10 @@ export const UserContext = createContext({
 // KEEPS TRACK OF OUR DATA/USE CASE CHANGES
 export const USER_ACTION_TYPES = {
   SET_CURRENT_USER: "SET_CURRENT_USER",
+};
+
+const INITIAL_STATE = {
+  currentUser: null,
 };
 
 const userReducer = (state, action) => {
@@ -45,10 +51,6 @@ case 'SET_CURRENT_USER':
   currentUser: payload "Everything else we will OVERWRITE"
 */
 
-const INITIAL_STATE = {
-  currentUser: null,
-};
-
 // Allows any of the children to access
 export const UserProvider = ({ children }) => {
   // const [currentUser, setCurrentUser] = useState(null);
@@ -56,9 +58,8 @@ export const UserProvider = ({ children }) => {
   const [{ currentUser }, dispatch] = useReducer(userReducer, INITIAL_STATE);
   console.log("currentUser: ", currentUser);
 
-  const setCurrentUser = (user) => {
-    dispatch({ type: USER_ACTION_TYPES.SET_CURRENT_USER, payload: user });
-  };
+  const setCurrentUser = (user) => dispatch(createAction(USER_ACTION_TYPES.SET_CURRENT_USER, user));
+
   // const { currentUser } = state;
 
   const value = { currentUser, setCurrentUser };

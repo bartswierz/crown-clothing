@@ -1,6 +1,7 @@
 import { useContext, React } from "react";
 
 import { CartContext } from "../../contexts/cart.context";
+// import { CategoriesContext } from "../../contexts/categories.context";
 
 import Button from "../button/button.component";
 import CartItem from "../cart-item/cart-item.component";
@@ -12,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 
 const CartDropdown = () => {
   const { cartItems } = useContext(CartContext);
+  // const { categoriesMap } = useContext(CategoriesContext);
+  // console.log(categoriesMap);
   const navigate = useNavigate();
 
   // Navigates to our checkoutpage WHEN user clicks checkout

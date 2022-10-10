@@ -1,25 +1,31 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+
 import { Routes, Route } from "react-router-dom";
 
+import { onAuthStateChangedListener, createUserDocumentFromAuth } from "./components/utils/firebase/firebase.utils";
 import Home from "./components/routes/home/home.component";
 import Navigation from "./components/routes/navigation/navigation.component";
 import Authentication from "./components/routes/authentication/authentication.component";
 // import Shop from "./routes/shop/shop.component";
 import Shop from "./components/routes/shop/shop.component";
 import Checkout from "./components/routes/checkout/checkout.component";
+import { setCurrentUser } from "./store/user/user.action";
 
-// SHOP PAGE
-// const Shop = () => {
-//   return <h1>I am the shop page</h1>;
-// };
-
-/* If text is the SAME for all areas, we can hardcode those,
-If text is different, then we PUT THOSE IN THE OBJECT CATEGORIES
-- categories.map((category) => {container content}. In this, we are going to iterate through our categories array to input out each of the names. This helps to PREVENT DRY.
-  */
 const App = () => {
-  // <Routes>
-  //   <Route path="/" index element={<Home />} />
-  // </Routes>
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChangedListener((user) => {
+      if (user) {
+        createUserDocumentFromAuth(user);
+      }
+      dispatch(setCurrentUser(user));
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<Navigation />}>
@@ -33,6 +39,11 @@ const App = () => {
 };
 
 export default App;
+
+/* If text is the SAME for all areas, we can hardcode those,
+If text is different, then we PUT THOSE IN THE OBJECT CATEGORIES
+- categories.map((category) => {container content}. In this, we are going to iterate through our categories array to input out each of the names. This helps to PREVENT DRY.
+  */
 
 /*
 <Route path="shop/*" element={<Shop />} />
