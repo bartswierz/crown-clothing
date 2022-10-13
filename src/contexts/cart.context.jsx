@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import { createContext } from "react";
 
 import { createAction } from "../components/utils/reducer/reducer.utils";
@@ -35,12 +35,6 @@ const removeCartItem = (cartItems, cartItemToRemove) => {
   }
 };
 
-// Helper function receive the cartItems because as we know we need to utilize this cartItem to give us BACK a NEW CART. And passing in the CARTITEM to REMOVE
-const clearCartItem = (cartItems, cartItemToClear) => {
-  // If cartItem does NOT equal the cartItem we are trying to REMOVE, then add it to our new cartItem
-  return cartItems.filter((cartItem) => cartItem.id !== cartItemToClear.id);
-};
-
 // Like a GLOBAL VARIABLE, can use this anywhere else(that is wrapped in the <CartProvider />). We initalize it with default values BUT as we run our application, the user's actions will add those values into here for us to be able to access.
 export const CartContext = createContext({
   isCartOpen: false,
@@ -53,12 +47,20 @@ export const CartContext = createContext({
   cartTotal: 0,
 });
 
-const CART_ACTION_TYPES = {
-  SET_CART_ITEMS: "SET_CART_ITEMS",
-  SET_IS_CART_OPEN: "SET_IS_CART_OPEN",
+// Helper function receive the cartItems because as we know we need to utilize this cartItem to give us BACK a NEW CART. And passing in the CARTITEM to REMOVE
+const clearCartItem = (cartItems, cartItemToClear) => {
+  // If cartItem does NOT equal the cartItem we are trying to REMOVE, then add it to our new cartItem
+  return cartItems.filter((cartItem) => cartItem.id !== cartItemToClear.id);
 };
 
-const INITIAL_STATE = {
+const CART_ACTION_TYPES = {
+  SET_IS_CART_OPEN: "SET_IS_CART_OPEN",
+  SET_CART_ITEMS: "SET_CART_ITEMS",
+  SET_CART_COUNT: "SET_CART_COUNT",
+  SET_CART_TOTAL: "SET_CART_TOTAL",
+};
+
+export const INITIAL_STATE = {
   isCartOpen: false,
   cartItems: [],
   cartCount: 0,
@@ -74,18 +76,15 @@ const cartReducer = (state, action) => {
         ...state,
         ...payload,
       };
-    case CART_ACTION_TYPES.SET_IS_CART_OPEN:
-      return {
-        ...state,
-        isCartOpen: payload,
-      };
     default:
       throw new Error(`unhandled type of ${type} in cartReducer`);
   }
 };
 
 export const CartProvider = ({ children }) => {
-  const [{ cartItems, isCartOpen, cartCount, cartTotal }, dispatch] = useReducer(cartReducer, INITIAL_STATE);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const [{ cartItems, cartCount, cartTotal }, dispatch] = useReducer(cartReducer, INITIAL_STATE);
 
   const updateCartItemsReducer = (newCartItems) => {
     //generate newCartCount
@@ -95,9 +94,16 @@ export const CartProvider = ({ children }) => {
     const newCartTotal = newCartItems.reduce((total, cartItem) => total + cartItem.quantity * cartItem.price, 0);
 
     //dispatch new action with payload -> createAction(action, payload)
-    dispatch(
-      createAction(CART_ACTION_TYPES.SET_CART_ITEMS, { cartItems: newCartItems, cartTotal: newCartTotal, cartCount: newCartCount })
-    );
+    // dispatch(
+    //   createAction(CART_ACTION_TYPES.SET_CART_ITEMS, { cartItems: newCartItems, cartTotal: newCartTotal, cartCount: newCartCount })
+    // );
+    const payload = {
+      cartItems,
+      cartCount: newCartCount,
+      cartTotal: newCartTotal,
+    };
+
+    dispatch(createAction(CART_ACTION_TYPES.SET_CART_ITEMS, payload));
   };
 
   const addItemToCart = (productToAdd) => {
@@ -115,9 +121,9 @@ export const CartProvider = ({ children }) => {
     updateCartItemsReducer(newCartItems);
   };
 
-  const setIsCartOpen = (bool) => {
-    dispatch(createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, bool));
-  };
+  // const setIsCartOpen = (bool) => {
+  //   dispatch(createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, bool));
+  // };
 
   const value = {
     isCartOpen,
