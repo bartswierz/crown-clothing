@@ -12,6 +12,7 @@ export const selectCategoriesMap = createSelector([selectCategories], (categorie
   }, {})
 );
 
+export const selectCategoriesIsLoading = createSelector([selectCategoryReducer], (categoriesSlice) => categoriesSlice.isLoading);
 //Memoization - you cache the previous value of something so that when the input does not change, then we return the same output.
 
 // const add = (a, b) => a + b;
