@@ -6,7 +6,7 @@ inverted
 google sign in
 */
 
-import { BaseButton, GoogleSignInButton, InvertedButton } from "./button.styles";
+import { BaseButton, GoogleSignInButton, InvertedButton, ButtonSpinner } from "./button.styles";
 
 // Object - This will let us switch between different button types
 export const BUTTON_TYPE_CLASSES = {
@@ -23,12 +23,20 @@ const getButton = (buttonType = BUTTON_TYPE_CLASSES.base) =>
   }[buttonType]);
 
 // buttonType is either equal to 'google' or 'inverted'
-const Button = ({ children, buttonType, ...otherProps }) => {
+const Button = ({ children, buttonType, isLoading, ...otherProps }) => {
   const CustomButton = getButton(buttonType);
-  return <CustomButton {...otherProps}>{children}</CustomButton>;
+  return (
+    <CustomButton disabled={isLoading} {...otherProps}>
+      {isLoading ? <ButtonSpinner /> : children}
+    </CustomButton>
+  );
 };
 
 export default Button;
+
+/* {isLoading ? <ButtonSpinner /> : children}
+If isLoading is TRUE then DISPLAY ButtonSpinner, ELSE DISPLAY CHILDREN
+*/
 
 // We use {...otherProps} to grab the type="submit"
 //  <button type="submit">Sign Up</button>
