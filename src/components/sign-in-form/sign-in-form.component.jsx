@@ -4,14 +4,14 @@ import { useDispatch } from "react-redux";
 import FormInput from "../form-input/form-input.component";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 
-import {
-  signInWithGooglePopup,
-  createUserDocumentFromAuth,
-  signInAuthUserWithEmailAndPassword,
-} from "../utils/firebase/firebase.utils";
+// import {
+//   signInWithGooglePopup,
+//   createUserDocumentFromAuth,
+//   signInAuthUserWithEmailAndPassword,
+// } from "../utils/firebase/firebase.utils";
 
 import "./sign-in-form.styles.scss";
-import { googleSignInStart } from "../../store/user/user.action";
+import { googleSignInStart, emailSignInStart } from "../../store/user/user.action";
 
 const defaultFormFields = {
   displayName: "",
@@ -45,10 +45,7 @@ const SignInForm = () => {
     event.preventDefault();
 
     try {
-      const { user } = await signInAuthUserWithEmailAndPassword(email, password);
-      // setCurrentUser(user);
-      console.log(user);
-
+      dispatch(emailSignInStart(email, password));
       resetFormFields();
     } catch (error) {
       switch (error.code) {

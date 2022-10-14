@@ -1,11 +1,13 @@
 // To track our inputs in our form component
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from "../utils/firebase/firebase.utils";
 
 import FormInput from "../form-input/form-input.component";
 import "./sign-up-form.styles.scss";
 import Button from "../button/button.component";
+import { signUpStart } from "../../store/user/user.action";
 
 const defaultFormFields = {
   displayName: "",
@@ -21,7 +23,7 @@ const SignUpForm = () => {
 
   // Destructuring off the four values from formFields
   const { displayName, email, password, confirmPassword } = formFields;
-
+  const dispatch = useDispatch();
   // const val = useContext(UserContext);
   // console.log("hit");
 
@@ -34,15 +36,14 @@ const SignUpForm = () => {
     // Prevent Default behavior of the FORM. We will handle events
     event.preventDefault();
 
+    // Our guard, if they don't match we return here before getting into the try block
     if (password !== confirmPassword) {
       alert("passwords do not match");
       return;
     }
 
     try {
-      const { user } = await createAuthUserWithEmailAndPassword(email, password);
-
-      await createUserDocumentFromAuth(user, { displayName });
+      dispatch(signUpStart(email, password, displayName));
       resetFormFields();
     } catch (error) {
       if (error.code === "auth.email-already-in-use") {

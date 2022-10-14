@@ -7,6 +7,7 @@ import { selectCartItems, selectCartTotal } from "../../../store/cart/cart.selec
 import "./checkout.styles.scss";
 
 import CheckoutItem from "../../checkout-item/checkout-item.component";
+import PaymentForm from "../../payment-form/payment-form.component";
 
 const Checkout = () => {
   // Getting access and destructuring CartContext
@@ -37,6 +38,7 @@ const Checkout = () => {
         <CheckoutItem key={cartItem.id} cartItem={cartItem} />
       ))}
       <span className="total">Total: ${cartTotal}</span>
+      <PaymentForm />
     </div>
   );
 };
